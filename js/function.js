@@ -166,11 +166,14 @@ const nightBg = () => {
     });
 };
 
-if (hour >= 16) {
+if (hour >= 16 && hour < 19) {
+    //夕方の設定
     eveningBg();
-} else if (hour >= 19) {
+} else if (hour >= 19 || hour < 4) {
+    //夜の設定
     nightBg();
 } else {
+    //日中の設定
     daytimeBg();
 }
 
