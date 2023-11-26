@@ -1,0 +1,11 @@
+//各ファイルは必ず登録済みの変数を最初に読み込みます
+//as *で読み込みファイル名を省略することができます
+@use "../global" as *;
+
+.footer {
+    position: fixed;
+    bottom: 8px;
+    left: 50%;
+    font-size: 0.625rem; //10px
+    transform: translateX(-50%);
+}

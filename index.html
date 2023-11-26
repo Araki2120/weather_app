@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>お天気API</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+JP:wght@700&display=swap"
+    rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet" media="all">
+</head>
+
+<body id="top">
+  <div class="wrapper">
+
+    <main class="main">
+      <div id="startBox" class="startBox">
+        <h1 class="startBox__ttl">Now Weather</h1>
+        <p class="startBox__txt">push start!</p>
+      </div>
+
+      <div id="mainBox" class="mainBox">
+        <p class="mainBox__date">2023.10.11</p>
+        <p class="mainBox__time">23:30</p>
+        <h2 id="mainBox__place" class="mainBox__place"></h2>
+        <div id="mainBox__now" class="mainBox__now">
+          <div id="mainBox__weather" class="mainBox__weather"></div>
+        </div>
+        <div class="forecastBox">
+          <h2 class="forecastBox__ttl">3時間ごとの天気</h2>
+          <div id="forecast" class="forecast"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p class="footer__copy"><small class="footer__small">&copy;2023 Now weather Inc.</small></p>
+    </footer>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bubbly-bg@1.0.0/dist/bubbly-bg.js"></script>
+  <script src="js/function.js"></script>
+  <script>
+    // bubbly({
+    //   blur: 0,
+    //   bubbles: 24,
+    //   colorStart: 'rgba(107, 238, 255, 1)',
+    //   colorStop: 'rgba(28, 122, 255, 1)',
+    //   velocityFunc: () => 0.1 + Math.random() * 0.1,
+    //   radiusFunc: () => 4 + Math.random() * 20,
+    // });</script>
+</body>
+
+</html>

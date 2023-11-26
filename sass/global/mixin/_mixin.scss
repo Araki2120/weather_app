@@ -1,0 +1,14 @@
+// settingフォルダの変数を読み込みます
+
+@use "../setting" as *;
+
+@mixin shadow {
+    text-shadow: 0.5px 0 0 #eaeaea;
+}
+
+@mixin box($radius: 20px) {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: $radius;
+    box-shadow: 1px 1px 1px #ccc;
+}

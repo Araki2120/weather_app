@@ -1,0 +1,29 @@
+//各ファイルは必ず登録済みの変数を最初に読み込みます
+//as *で読み込みファイル名を省略することができます
+@use "../global" as *;
+
+#top {
+
+    //start画面用
+    .close {
+        animation: closeAnimation 1s ease-in-out forwards;
+    }
+
+    //main画面用
+    .open {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+@keyframes closeAnimation {
+    20% {
+        background: #fff;
+    }
+
+    100% {
+        transform: translateY(-100%);
+        background: #fff;
+        visibility: hidden;
+    }
+}

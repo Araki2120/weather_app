@@ -1,0 +1,161 @@
+//各ファイルは必ず登録済みの変数を最初に読み込みます
+//as *で読み込みファイル名を省略することができます
+@use "../global" as *;
+
+#top {
+    .main {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+    }
+
+    .startBox {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+        z-index: 1;
+
+        &__ttl {
+            font-size: 1.5rem; //24px
+            margin-bottom: 10px;
+            @include shadow;
+
+            &::after {
+                content: '';
+                display: block;
+                width: 72%;
+                height: 2px;
+                margin: 0 auto;
+                margin-top: 10px;
+                background: #fff;
+            }
+        }
+
+        &__txt {
+            @include shadow;
+        }
+    }
+
+    .mainBox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5% 5% 10%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 1s 2s;
+
+        @media screen and (min-width: 768px) {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 5% 10%;
+        }
+
+        &__date {
+            @include shadow;
+        }
+
+        &__time {
+            font-size: 2.25rem; //36px
+            @include shadow;
+        }
+
+        &__place {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-family: $noto;
+            @include shadow;
+        }
+
+        &__now {
+            height: 40vh;
+            margin-bottom: 16px;
+            @include box;
+        }
+
+        &__weather {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 3%;
+            color: #333;
+        }
+
+        &__icon {
+            width: 25vh;
+            aspect-ratio: 1 / 1;
+            margin-bottom: 10%;
+        }
+
+        &__description {
+            font-family: $noto;
+        }
+    }
+
+    .forecastBox {
+        width: 100%;
+
+        &__ttl {
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-family: $noto;
+            text-align: center;
+        }
+    }
+
+    .forecast {
+        width: 100%;
+        color: #333;
+        font-size: 0.875rem;
+        @include box;
+
+        &__ul {
+            position: relative;
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1.5fr 1fr;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: min(100vh, 100px);
+            padding: 0 5%;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                display: block;
+                width: 90%;
+                height: 1%;
+                background: #ccc;
+                transform: translateX(-50%);
+            }
+
+            &:last-child::after {
+                display: none;
+            }
+
+            li {
+                margin: 0 auto;
+            }
+        }
+
+        &__icon {
+            max-width: 80px;
+            height: 50px;
+        }
+
+        &__description {
+            font-family: $noto;
+        }
+    }
+}
