@@ -99,8 +99,6 @@
         }
 
         &__icon {
-            width: auto;
-            height: min(60%, 300px);
             margin-bottom: 10%;
         }
 
@@ -166,8 +164,8 @@
         }
 
         &__icon {
-            max-width: 90px;
-            height: 50px;
+            width: min(80%, 90px);
+            height: auto;
         }
 
         &__description {
