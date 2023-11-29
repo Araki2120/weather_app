@@ -70,6 +70,7 @@ const ajaxRequest = (lat, long) => {
                         <div class="mainBox__info">
                             <p>
                                 <span class="mainBox__description">現在のお天気:${description}</span>
+                                <p class="mainBox__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp"></p>
                                 <span class="mainBox__temp">${temperature}</span>℃
                             </p>
                         </div>`;
@@ -81,10 +82,9 @@ const ajaxRequest = (lat, long) => {
                             <li class="forecast__info">${month}/${date} ${hours}:${min}</li>
                             <li class="forecast__icon"><img src="${iconPath}" alt="お天気アイコン"></li>
                             <li><span class="forecast__description">${description}</span></li>
-                            <li><span class="forecast__temp">${temperature}℃</span></li>
+                            <li class="forecast__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp">${temperature}℃</span></li>
                         </ul>`;
                     const fore = document.querySelector('#forecast');
-                    // fore.innerHTML = list;
                     fore.insertAdjacentHTML('beforeend', list);
                 }
             }
