@@ -8,80 +8,11 @@ start.addEventListener('click', function () {
 });
 
 
-//位置情報の取得
-const success = (pos) => {
-    ajaxRequest(pos.coords.latitude, pos.coords.longitude);
-}
-
-const fail = (error) => {
-    alert('位置情報の取得に失敗しました。エラーコード：' + error.code);
-}
-
-navigator.geolocation.getCurrentPosition(success, fail);
-
-
 //UTCをミリ秒に設定
 const utcToJSTime = (utsTime) => {
     return utsTime * 1000;
-}
+};
 
-
-//acync,awaitの実行
-async function fetchData(url, params) {
-    try {
-        const response = await fetch(`${url}?${params}`);
-
-        if (!response.ok) {
-            throw new Error('ネットワークに接続できません。');
-        }
-        const data = await response.json();
-
-        // 都市名・国名
-        const place = document.querySelector('#mainBox__place');
-        place.textContent = data.city.name + ':' + data.city.country;
-
-        //天気予報のデータ
-        for (let i = 0; i < data.list.length; i++) {
-            const forecast = data.list[i];
-            const dateTime = new Date(utcToJSTime(forecast.dt));
-            const month = dateTime.getMonth() + 1;
-            const date = dateTime.getDate();
-            const hours = dateTime.getHours();
-            const min = String(dateTime.getMinutes()).padStart(2, '0');
-            const temperature = Math.round(forecast.main.temp);
-            const description = forecast.weather[0].description;
-            const iconPath = `images/${forecast.weather[0].icon}.svg`;
-
-            if (i === 0) {
-                const currentWeather = `
-                        <div class="mainBox__icon"><img src="${iconPath}" alt="お天気アイコン"></div>
-                        <div class="mainBox__info">
-                            <p>
-                                <span class="mainBox__description">現在のお天気:${description}</span>
-                                <p class="mainBox__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp"></p>
-                                <span class="mainBox__temp">${temperature}</span>℃
-                            </p>
-                        </div>`;
-                const weather = document.querySelector('#mainBox__weather');
-                weather.innerHTML = currentWeather;
-            } else {
-                const list = `
-                        <ul class="forecast__ul">
-                            <li class="forecast__info">${month}/${date} ${hours}:${min}</li>
-                            <li class="forecast__icon"><img src="${iconPath}" alt="お天気アイコン"></li>
-                            <li><span class="forecast__description">${description}</span></li>
-                            <li class="forecast__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp">${temperature}℃</span></li>
-                        </ul>`;
-                const fore = document.querySelector('#forecast');
-                fore.insertAdjacentHTML('beforeend', list);
-            }
-        }
-    } catch (error) {
-        window.alert(error);
-    } finally {
-        console.log('処理完了しました');
-    }
-}
 
 //データの取得
 const ajaxRequest = (lat, long) => {
@@ -95,68 +26,93 @@ const ajaxRequest = (lat, long) => {
         units: 'metric',
         lang: 'ja',
     });
-    fetchData(url, params);
+
+    return {
+        url, params
+    };
+};
+
+//acync,awaitの実行
+async function fetchData(url, params) {
+    try {
+        const response = await fetch(`${url}?${params}`);
+
+        if (!response.ok) {
+            throw new Error('ネットワークに接続できません。');
+        }
+        const data = await response.json();
+        //これでdata本体を返す
+        return data;
+
+    } catch (error) {
+        window.alert(error);
+    } finally {
+        console.log('処理完了しました');
+    }
+};
+
+//データの加工
+const processing = () => {
+
+    // 都市名・国名
+    const place = document.querySelector('#mainBox__place');
+    place.textContent = data.city.name + ':' + data.city.country;
+
+    //天気予報のデータ
+    for (let i = 0; i < data.list.length; i++) {
+        const forecast = data.list[i];
+        const dateTime = new Date(utcToJSTime(forecast.dt));
+        const month = dateTime.getMonth() + 1;
+        const date = dateTime.getDate();
+        const hours = dateTime.getHours();
+        const min = String(dateTime.getMinutes()).padStart(2, '0');
+        const temperature = Math.round(forecast.main.temp);
+        const description = forecast.weather[0].description;
+        const iconPath = `images/${forecast.weather[0].icon}.svg`;
+
+        if (i === 0) {
+            const currentWeather = `
+                    <div class="mainBox__icon"><img src="${iconPath}" alt="お天気アイコン"></div>
+                    <div class="mainBox__info">
+                        <p>
+                            <span class="mainBox__description">現在のお天気:${description}</span>
+                            <p class="mainBox__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp"></p>
+                            <span class="mainBox__temp">${temperature}</span>℃
+                        </p>
+                    </div>`;
+            const weather = document.querySelector('#mainBox__weather');
+            weather.innerHTML = currentWeather;
+        } else {
+            const list = `
+                    <ul class="forecast__ul">
+                        <li class="forecast__info">${month}/${date} ${hours}:${min}</li>
+                        <li class="forecast__icon"><img src="${iconPath}" alt="お天気アイコン"></li>
+                        <li><span class="forecast__description">${description}</span></li>
+                        <li class="forecast__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp">${temperature}℃</span></li>
+                    </ul>`;
+            const fore = document.querySelector('#forecast');
+            fore.insertAdjacentHTML('beforeend', list);
+        }
+    }
 };
 
 
-// //acync,awaitの実行
-// async function fetchData(url, params) {
-//     try {
-//         const response = await fetch(`${url}?${params}`);
+//位置情報の取得
+const success = (pos) => {
+    ajaxRequest(pos.coords.latitude, pos.coords.longitude);
 
-//         if (!response.ok) {
-//             throw new Error('ネットワークに接続できません。');
-//         }
-//         const data = await response.json();
+    //データの取得
+    fetchData(url, params);
+    //データの加工
+    processing(data);
+    //HTMLへの挿入 もっとみるの時にわけたものをいれる  fore.insertAdjacentHTML('beforeend', list);をいれる
+};
 
-//         // 都市名・国名
-//         const place = document.querySelector('#mainBox__place');
-//         place.textContent = data.city.name + ':' + data.city.country;
+const fail = (error) => {
+    alert('位置情報の取得に失敗しました。エラーコード：' + error.code);
+};
 
-//         //天気予報のデータ
-//         for (let i = 0; i < data.list.length; i++) {
-//             const forecast = data.list[i];
-//             const dateTime = new Date(utcToJSTime(forecast.dt));
-//             const month = dateTime.getMonth() + 1;
-//             const date = dateTime.getDate();
-//             const hours = dateTime.getHours();
-//             const min = String(dateTime.getMinutes()).padStart(2, '0');
-//             const temperature = Math.round(forecast.main.temp);
-//             const description = forecast.weather[0].description;
-//             const iconPath = `images/${forecast.weather[0].icon}.svg`;
-
-//             if (i === 0) {
-//                 const currentWeather = `
-//                     <div class="mainBox__icon"><img src="${iconPath}" alt="お天気アイコン"></div>
-//                     <div class="mainBox__info">
-//                         <p>
-//                             <span class="mainBox__description">現在のお天気:${description}</span>
-//                             <p class="mainBox__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp"></p>
-//                             <span class="mainBox__temp">${temperature}</span>℃
-//                         </p>
-//                     </div>`;
-//                 const weather = document.querySelector('#mainBox__weather');
-//                 weather.innerHTML = currentWeather;
-//             } else {
-//                 const list = `
-//                     <ul class="forecast__ul">
-//                         <li class="forecast__info">${month}/${date} ${hours}:${min}</li>
-//                         <li class="forecast__icon"><img src="${iconPath}" alt="お天気アイコン"></li>
-//                         <li><span class="forecast__description">${description}</span></li>
-//                         <li class="forecast__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp">${temperature}℃</span></li>
-//                     </ul>`;
-//                 const fore = document.querySelector('#forecast');
-//                 fore.insertAdjacentHTML('beforeend', list);
-//             }
-//         }
-//     } catch (error) {
-//         window.alert(error);
-//     } finally {
-//         console.log('処理完了しました');
-//     }
-// }
-// // この関数を呼び出す
-// fetchData(url, params);
+navigator.geolocation.getCurrentPosition(success, fail);
 
 
 //現在時刻の表示
