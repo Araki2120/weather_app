@@ -106,7 +106,8 @@
         }
 
         &__icon {
-            height: 60%;
+            width: min(60%, 120px);
+            height: auto;
             margin-bottom: 5%;
 
             @media screen and (min-width: 768px) {
@@ -127,7 +128,8 @@
 
         &__temperature {
             display: inline-block;
-            height: 30px;
+            width: 20px;
+            height: auto;
         }
     }
 
@@ -200,7 +202,8 @@
             display: flex;
             align-items: center;
             gap: 5%;
-            height: 30px;
+            width: 15px;
+            height: auto;
         }
     }
 }
