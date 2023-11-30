@@ -32,16 +32,20 @@ const ajaxRequest = (lat, long) => {
     };
 };
 
+
 //acync,awaitの実行
-async function fetchData(url, params) {
+// const fetchData = async () => {
+const fetchData = async (url, params) => {
+
     try {
         const response = await fetch(`${url}?${params}`);
 
         if (!response.ok) {
             throw new Error('ネットワークに接続できません。');
         }
+
+        // //これでdata本体を返す
         const data = await response.json();
-        //これでdata本体を返す
         return data;
 
     } catch (error) {
@@ -50,16 +54,21 @@ async function fetchData(url, params) {
         console.log('処理完了しました');
     }
 };
+// };
+
 
 //データの加工
-const processing = () => {
+const processing = (data) => {
+    // console.log(data);
 
     // 都市名・国名
     const place = document.querySelector('#mainBox__place');
     place.textContent = data.city.name + ':' + data.city.country;
+    const day = 24 / 3;//１日分のデータ数
 
-    //天気予報のデータ
-    for (let i = 0; i < data.list.length; i++) {
+    //天気予報のデータ 2日分表示
+    // for (let i = 0; i < data.list.length; i++) {
+    for (let i = 0; i < day * 2; i++) {
         const forecast = data.list[i];
         const dateTime = new Date(utcToJSTime(forecast.dt));
         const month = dateTime.getMonth() + 1;
@@ -83,8 +92,8 @@ const processing = () => {
             const weather = document.querySelector('#mainBox__weather');
             weather.innerHTML = currentWeather;
         } else {
-            const list = `
-                    <ul class="forecast__ul">
+            const list =
+                ` <ul class="forecast__ul">
                         <li class="forecast__info">${month}/${date} ${hours}:${min}</li>
                         <li class="forecast__icon"><img src="${iconPath}" alt="お天気アイコン"></li>
                         <li><span class="forecast__description">${description}</span></li>
@@ -96,16 +105,22 @@ const processing = () => {
     }
 };
 
+//位置情報の取得 全体の実行
+const success = async (pos) => {
+    const { url, params } = ajaxRequest(pos.coords.latitude, pos.coords.longitude);
 
-//位置情報の取得
-const success = (pos) => {
-    ajaxRequest(pos.coords.latitude, pos.coords.longitude);
+    console.log(url, params);
 
-    //データの取得
-    fetchData(url, params);
-    //データの加工
-    processing(data);
-    //HTMLへの挿入 もっとみるの時にわけたものをいれる  fore.insertAdjacentHTML('beforeend', list);をいれる
+    try {
+        //データの取得
+        const data = await fetchData(url, params);
+        //データの加工
+        processing(data);
+        //HTMLへの挿入 もっとみるの時にわけたものをいれる  fore.insertAdjacentHTML('beforeend', list);をいれる
+
+    } catch (error) {
+        alert('データの取得に失敗しました。エラー：' + error);
+    }
 };
 
 const fail = (error) => {
