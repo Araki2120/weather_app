@@ -43,7 +43,7 @@ const fetchData = async (url, params) => {
             throw new Error('ネットワークに接続できません。');
         }
 
-        // //これでdata本体を返す
+        // dataを返す
         const data = await response.json();
         return data;
 
@@ -65,8 +65,7 @@ const processing = (data) => {
     const threeHourWeatherForecasts = [];
 
     //天気予報のデータ 2日分表示
-    for (let i = 0; i < data.list.length; i++) {
-        // for (let i = 0; i < day * 2; i++) {
+    for (let i = 0; i < day * 2; i++) {
         const forecast = data.list[i];
         const dateTime = new Date(utcToJSTime(forecast.dt));
         const month = dateTime.getMonth() + 1;
@@ -98,23 +97,8 @@ const processing = (data) => {
                         <li class="forecast__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp">${temperature}℃</span></li>
                     </ul>`;
 
-            //listを配列にpushしておく
-            threeHourWeatherForecasts.push(list);
-            console.log(threeHourWeatherForecasts);
             const foreEl = document.querySelector('#forecast');
-
-            const insertHTML = (list) => {
-                foreEl.insertAdjacentHTML('beforeend', list);
-                // return list;
-            };
-
-            threeHourWeatherForecasts.forEach((threeHourWeatherForecast, i) => {
-                if (foreEl.classList.contains('prev')) {
-                    insertHTML(threeHourWeatherForecast);
-                }
-            });
-
-            // 必要な数だけforEachで処理してreturn;する
+            foreEl.insertAdjacentHTML('beforeend', list);
         }
     }
 };
@@ -130,8 +114,6 @@ const success = async (pos) => {
         const data = await fetchData(url, params);
         //データの加工
         processing(data);
-        //HTMLへの挿入 もっとみるの時にわけたものをいれる  fore.insertAdjacentHTML('beforeend', list);をいれる
-
     } catch (error) {
         alert('データの取得に失敗しました。エラー：' + error);
     }
@@ -155,7 +137,7 @@ const refresh = () => {
 function recalc() {
     const now = new Date();
     const year = now.getFullYear();
-    const month = now.getMonth() + 1;//0-11になるので１足す
+    const month = now.getMonth() + 1;
     const date = now.getDate();
     hour = now.getHours();
     const min = now.getMinutes();
@@ -221,6 +203,3 @@ if (hour >= 16 && hour < 19) {
     //日中の設定
     daytimeBg();
 };
-
-//進捗確認用
-console.log('最後まで進みました');
