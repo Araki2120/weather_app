@@ -34,7 +34,6 @@ const ajaxRequest = (lat, long) => {
 
 
 //acync,awaitの実行
-// const fetchData = async () => {
 const fetchData = async (url, params) => {
 
     try {
@@ -54,21 +53,20 @@ const fetchData = async (url, params) => {
         console.log('処理完了しました');
     }
 };
-// };
 
 
 //データの加工
 const processing = (data) => {
-    // console.log(data);
 
     // 都市名・国名
     const place = document.querySelector('#mainBox__place');
     place.textContent = data.city.name + ':' + data.city.country;
     const day = 24 / 3;//１日分のデータ数
+    const threeHourWeatherForecasts = [];
 
     //天気予報のデータ 2日分表示
-    // for (let i = 0; i < data.list.length; i++) {
-    for (let i = 0; i < day * 2; i++) {
+    for (let i = 0; i < data.list.length; i++) {
+        // for (let i = 0; i < day * 2; i++) {
         const forecast = data.list[i];
         const dateTime = new Date(utcToJSTime(forecast.dt));
         const month = dateTime.getMonth() + 1;
@@ -99,8 +97,24 @@ const processing = (data) => {
                         <li><span class="forecast__description">${description}</span></li>
                         <li class="forecast__temperature"><img src="images/thermometer.svg" alt="温度計アイコン"><span class="forecast__temp">${temperature}℃</span></li>
                     </ul>`;
-            const fore = document.querySelector('#forecast');
-            fore.insertAdjacentHTML('beforeend', list);
+
+            //listを配列にpushしておく
+            threeHourWeatherForecasts.push(list);
+            console.log(threeHourWeatherForecasts);
+            const foreEl = document.querySelector('#forecast');
+
+            const insertHTML = (list) => {
+                foreEl.insertAdjacentHTML('beforeend', list);
+                // return list;
+            };
+
+            threeHourWeatherForecasts.forEach((threeHourWeatherForecast, i) => {
+                if (foreEl.classList.contains('prev')) {
+                    insertHTML(threeHourWeatherForecast);
+                }
+            });
+
+            // 必要な数だけforEachで処理してreturn;する
         }
     }
 };
