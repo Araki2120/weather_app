@@ -106,7 +106,7 @@
         }
 
         &__icon {
-            width: min(60%, 120px);
+            width: min(60%, 140px);
             height: auto;
             margin-bottom: 5%;
 
@@ -162,7 +162,7 @@
         &__ul {
             position: relative;
             display: grid;
-            grid-template-columns: 2fr 1.5fr 1.5fr 1fr;
+            grid-template-columns: 2fr 1.5fr 1.5fr 1.5fr;
             justify-content: space-between;
             align-items: center;
             width: 100%;
@@ -201,6 +201,7 @@
 
         &__temperature {
             display: flex;
+            justify-content: center;
             align-items: center;
             gap: 5%;
             width: 15px;

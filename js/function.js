@@ -2,7 +2,7 @@
 const start = document.querySelector('#startBox');
 const main = document.querySelector('#mainBox');
 
-start.addEventListener('click', function () {
+start.addEventListener('click', () => {
     start.classList.add('close');
     main.classList.add('open');
 });
@@ -134,7 +134,7 @@ const refresh = () => {
     setTimeout(recalc, 1000);
 };
 
-function recalc() {
+const recalc = () => {
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth() + 1;
